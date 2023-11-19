@@ -7,8 +7,8 @@ import time
 # Steg 1: Öppna cmd och skriv in cd C:\Program Files (x86)\Google\Chrome\Application
 # Steg 2: skriv in detta: chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\Selenium\Chrome_Test_Profile
 # Steg 3: gå till tiktok.com och logga in
-# name: jokingboxer@gmail.com
-# pass: Hinsaringen39
+# name: 
+# pass: 
 
 
 # Number of iterations to perform before taking a break
