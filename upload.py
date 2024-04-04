@@ -11,6 +11,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+successful_uploads = 0
+
 opt = Options()
 opt.add_experimental_option("debuggerAddress", "localhost:8989")
 driver = webdriver.Chrome(executable_path="C:\Selenium\chromedriver.exe",chrome_options=opt)
@@ -48,7 +50,7 @@ def deleteTheFile(nameOfFileAndPath):
     print("Deleting the movie from folder")
     os.remove(nameOfFileAndPath)
 
-def deleteAllFilesInFolderIfFilesExist():
+"""def deleteAllFilesInFolderIfFilesExist():
     folder_path = "C:\\Users\\FelixEdenborgh\\Documents\\PythonPrograms\\CreateTiktokVideosAndAutoUpload\\movie" # <-- your folder where the videos are in.
 
     files_in_folder = os.listdir(folder_path)
@@ -63,6 +65,37 @@ def deleteAllFilesInFolderIfFilesExist():
                     print(f"Deleted file: {file_path}")
             except Exception as e:
                 print(f"Error deleting file {file_path}: {e}")
+
+    if not files_in_folder:
+        print(f"The folder '{folder_path}' is empty.")
+        for filename in files_in_folder:
+            file_path = os.path.join(folder_path, filename)
+            try:
+                if os.path.isfile(file_path):
+                    os.remove(file_path)
+                    print(f"Deleted file: {file_path}")
+            except Exception as e:
+                print(f"Error deleting file {file_path}: {e}")"""
+
+def deleteAllFilesInFolderIfFilesExist():
+    folder_path = "C:\\Users\\FelixEdenborgh\\Documents\\PythonPrograms\\CreateTiktokVideosAndAutoUpload\\movie"  # <-- your folder where the videos are in.
+
+    # Get a list of all files in the folder
+    files_in_folder = os.listdir(folder_path)
+
+    # Check if the list is not empty
+    if files_in_folder:
+        for filename in files_in_folder:
+            file_path = os.path.join(folder_path, filename)
+            try:
+                if os.path.isfile(file_path):
+                    os.remove(file_path)
+                    print(f"Deleted file: {file_path}")
+            except Exception as e:
+                print(f"Error deleting file {file_path}: {e}")
+    else:
+        print(f"The folder '{folder_path}' is empty.")
+
 
 def popup():
     try:
@@ -98,7 +131,7 @@ def find_element_and_send(method, value):
         if element:
             element.clear()
             time.sleep(2)
-            element.send_keys("Motivational Quote. Check my profile :)")
+            element.send_keys("Check my profile <3 Motivational Quote.")
             time.sleep(2)
             element.send_keys("#motivation" + Keys.ENTER)
             time.sleep(2)
@@ -156,13 +189,14 @@ def uploadAnotherButton():
 
 
 def publishButton(video_path):
+    global successful_uploads
     try:
         try:
             time.sleep(15)
             PublishButton = driver.find_element(By.XPATH,
-                                                '/html/body/div[1]/div/div/div/div[2]/div[2]/div[2]/div[7]/div[2]/button')
+                                                '/html/body/div[1]/div/div/div/div[2]/div[2]/div[2]/div[8]/div[2]/button')
             PublishButton.click()
-
+            successful_uploads += 1
             time.sleep(15)
             deleteTheFile(video_path)
             return print("PublishButton clicked")
@@ -171,9 +205,9 @@ def publishButton(video_path):
 
         try:
             PublishButton = driver.find_element(By.CSS_SELECTOR,
-                                                '#root > div > div > div > div.jsx-2907531398.container-v2 > div.jsx-2907531398.contents-v2 > div.jsx-3073379498.form-v2 > div.jsx-3073379498.button-row > div.jsx-3073379498.btn-post > button')
+                                                '#root > div > div > div > div.jsx-4145698467.container-v2 > div.jsx-4145698467.contents-v2.reverse > div.jsx-2908024588.form-v2.reverse > div.jsx-2908024588.button-row > div.jsx-2908024588.btn-post > button')
             PublishButton.click()
-
+            successful_uploads += 1
             time.sleep(15)
             deleteTheFile(video_path)
             return print("PublishButton clicked")
@@ -183,7 +217,7 @@ def publishButton(video_path):
         try:
             PublishButton = driver.find_element(By.CLASS_NAME, "css-y1m958")
             PublishButton.click()
-
+            successful_uploads += 1
             time.sleep(15)
             deleteTheFile(video_path)
             return print("PublishButton clicked")
@@ -201,11 +235,6 @@ def upload():
 
     print("New upload started")
 
-    if popup() is False:
-        print("No popup")
-    else:
-        popup()
-        print("Popup handled")
 
     if uploadAnotherButton is False:
         print("No Upload another button located")
@@ -316,6 +345,6 @@ def upload():
             UploadnewVideoButton.click()
         except:
             print("Cant click on adding new video")
-        popup()
+        #popup()
     except:
         print("Error")

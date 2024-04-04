@@ -8,22 +8,26 @@ from moviepy.editor import *
 import ffmpeg
 import numpy as np
 
-
-
-
 # Vidio creating
-openai.api_key = ""
+openai.api_key = "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"    # <---- your api key
 
-def generate_response(prompt):
-    response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=prompt,
-        max_tokens=64,
-        n=1,
-        stop=None,
-        temperature=0.7,
-    )
-    return response.choices[0].text
+def generate_response(prompt, max_attempts=3):
+    for _ in range(max_attempts):
+        try:
+            response = openai.Completion.create(
+                engine="gpt-3.5-turbo-instruct",
+                prompt=prompt,
+                max_tokens=64,
+                n=1,
+                stop=None,
+                temperature=0.7,
+            )
+            return response.choices[0].text
+        except openai.error.OpenAIError as e:
+            print(f"An error occurred: {e}")
+            print("Retrying...")
+            time.sleep(5)  # Wait for a few seconds before retrying
+    return "Failed to generate a response after multiple attempts."
 folder = "C:\\Users\\FelixEdenborgh\\Documents\\PythonPrograms\\CreateTiktokVideosAndAutoUpload\\files"
 
 
@@ -31,7 +35,7 @@ folder = "C:\\Users\\FelixEdenborgh\\Documents\\PythonPrograms\\CreateTiktokVide
 def makeTxtFile():
     number = 1  # changed to start at 1
     name = f"Daily motivation quote {number}.txt"
-    prompt = "Can you give me a motivational quote about love?"
+    prompt = "Can you give me a motivational quote about joy?"
     response = generate_response(prompt)
     print(response)
 
