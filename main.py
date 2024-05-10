@@ -14,50 +14,41 @@ upload.deleteAllFilesInFolderIfFilesExist()
 
 # Time to sleep in seconds for the break
 break_duration = 3 * 60 * 60
+numbers = 0  # Counter for created videos
+MAX_UPLOADS = 5  # Maximum number of uploads before taking a break
+MAX_CREATIONS = 10  # Maximum number of videos to create
 
-numbers = 0
 while True:
     upload.deleteAllFilesInFolderIfFilesExist()
     upload.driver.get("https://www.tiktok.com/creator-center/upload?lang=sv-SE")
-    time.sleep(6)  # Simplified redundant sleeps
 
-    if not upload.uploadAnotherButton():
-        print("No Upload another button located")
-    else:
-        print("Button Clicked")
-
-    # Assuming the popup handling and other interactions are correctly implemented in your upload.upload() method
-    # and that successful_uploads is correctly updated in your publishButton method
-
-    while upload.successful_uploads < 10:
-        time.sleep(10)
+    while upload.successful_uploads < MAX_UPLOADS and numbers < MAX_CREATIONS:
         if not upload.uploadAnotherButton():
-            print("No Upload another button located")
-        else:
-            print("Button Clicked")
+            print("Upload another button clicked.")
+            upload.publishButton(upload.getFirstFile())  # Handle file upload
 
-        upload.publishButton(upload.getFirstFile())  # Assuming this correctly handles the file upload
+            # Assuming these methods are correctly creating a video
+            movieMaking.makeTxtFile()
+            movieMaking.ConvertToMp3()
+            movieMaking.CreateAImageWithTheDailyQuoteWrittenOnIt()
+            movieMaking.CombineImageWithMp3(numbers)
+            numbers += 1
+            print(f"Movies built: {numbers}")
 
-        movieMaking.makeTxtFile()
-        movieMaking.ConvertToMp3()
-        movieMaking.CreateAImageWithTheDailyQuoteWrittenOnIt()
-        movieMaking.CombineImageWithMp3(numbers)
-        numbers += 1
-        print(f"Movies built: {numbers}")
+            print("Starting upload")
+            upload.upload()  # Handle the upload logic
+            print(f"Videos uploaded: {upload.successful_uploads}")
 
-        print("Starting upload")
-        upload.upload()  # This should encapsulate the upload logic and update successful_uploads
-        print(f"Videos uploaded: {upload.successful_uploads}")
-        time.sleep(10)
+        time.sleep(10)  # Wait before next action/check
 
-        if upload.getFirstFile() is False:
-            upload.deleteAllFilesInFolderIfFilesExist()
+    if upload.successful_uploads >= MAX_UPLOADS:
+        print("Maximum uploads reached, taking a break.")
+        upload.successful_uploads = 0  # Reset the counter for successful uploads
 
-        # Additional check to ensure we break out of the loop if 10 videos have been uploaded
-        if upload.successful_uploads >= 10:
-            print(f"Uploaded 10 videos, taking a break.")
-            upload.successful_uploads = 0  # Reset the counter
-            break  # Break out of the while loop to take a break
+    if numbers >= MAX_CREATIONS:
+        print("Maximum number of videos created, stopping.")
+        break  # Exit the main loop if the max number of videos has been created
 
+    # Define break_duration somewhere in your script
     print(f"Taking a break for {break_duration / 3600} hours...")
-    time.sleep(break_duration)
+    time.sleep(break_duration)  # Take a break before the next batch

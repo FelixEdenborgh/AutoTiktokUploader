@@ -50,32 +50,6 @@ def deleteTheFile(nameOfFileAndPath):
     print("Deleting the movie from folder")
     os.remove(nameOfFileAndPath)
 
-"""def deleteAllFilesInFolderIfFilesExist():
-    folder_path = "C:\\Users\\FelixEdenborgh\\Documents\\PythonPrograms\\CreateTiktokVideosAndAutoUpload\\movie" # <-- your folder where the videos are in.
-
-    files_in_folder = os.listdir(folder_path)
-
-    if not files_in_folder:
-        print(f"The folder '{folder_path}' is empty.")
-        for filename in files_in_folder:
-            file_path = os.path.join(folder_path, filename)
-            try:
-                if os.path.isfile(file_path):
-                    os.remove(file_path)
-                    print(f"Deleted file: {file_path}")
-            except Exception as e:
-                print(f"Error deleting file {file_path}: {e}")
-
-    if not files_in_folder:
-        print(f"The folder '{folder_path}' is empty.")
-        for filename in files_in_folder:
-            file_path = os.path.join(folder_path, filename)
-            try:
-                if os.path.isfile(file_path):
-                    os.remove(file_path)
-                    print(f"Deleted file: {file_path}")
-            except Exception as e:
-                print(f"Error deleting file {file_path}: {e}")"""
 
 def deleteAllFilesInFolderIfFilesExist():
     folder_path = "C:\\Users\\FelixEdenborgh\\Documents\\PythonPrograms\\CreateTiktokVideosAndAutoUpload\\movie"  # <-- your folder where the videos are in.
@@ -194,7 +168,7 @@ def publishButton(video_path):
         try:
             time.sleep(15)
             PublishButton = driver.find_element(By.XPATH,
-                                                '/html/body/div[1]/div/div/div/div[2]/div[2]/div[2]/div[8]/div[2]/button')
+                                                '//*[@id="root"]/div/div/div/div[2]/div/div[2]/div[8]/button[2]')
             PublishButton.click()
             successful_uploads += 1
             time.sleep(15)
@@ -204,8 +178,20 @@ def publishButton(video_path):
             print("Xpath dont work")
 
         try:
+            time.sleep(15)
+            PublishButton = driver.find_element(By.XPATH,
+                                                '/html/body/div[1]/div/div/div/div[2]/div/div[2]/div[8]/button[2]')
+            PublishButton.click()
+            successful_uploads += 1
+            time.sleep(15)
+            deleteTheFile(video_path)
+            return print("PublishButton clicked")
+        except:
+            print("Full Xpath dont work")
+
+        try:
             PublishButton = driver.find_element(By.CSS_SELECTOR,
-                                                '#root > div > div > div > div.jsx-4145698467.container-v2 > div.jsx-4145698467.contents-v2.reverse > div.jsx-2908024588.form-v2.reverse > div.jsx-2908024588.button-row > div.jsx-2908024588.btn-post > button')
+                                                '#root > div > div > div > div.jsx-480949468.container-v2.form-panel.flow-opt-v1 > div > div.jsx-2745626608.form-v2.reverse.flow-opt-v1 > div.jsx-2745626608.button-group > button.TUXButton.TUXButton--default.TUXButton--large.TUXButton--primary')
             PublishButton.click()
             successful_uploads += 1
             time.sleep(15)
@@ -215,7 +201,7 @@ def publishButton(video_path):
             print("Stylesheet dont work")
 
         try:
-            PublishButton = driver.find_element(By.CLASS_NAME, "css-y1m958")
+            PublishButton = driver.find_element(By.CLASS_NAME, "TUXButton TUXButton--default TUXButton--large TUXButton--primary")
             PublishButton.click()
             successful_uploads += 1
             time.sleep(15)
@@ -229,8 +215,40 @@ def publishButton(video_path):
         print("Error")
         return print("Cant find PublishButton")
 
+
+def uploadAnother():
+    try:
+        try:
+            uploadAnother = driver.find_element(By.XPATH, "//*[@id=':r29:']/div[3]/button[2]/div/div")
+            return print("Upload another video Xpath vorked")
+        except:
+            print("Xpath not working for upload another")
+
+        try:
+            uploadAnother = driver.find_element(By.XPATH, "/html/body/div[8]/div/div/div[3]/button[2]/div/div")
+            return print("Upload another video Full Xpath vorked")
+        except:
+            print("Full Xpath not working for upload another")
+
+        try:
+            uploadAnother = driver.find_element(By.CSS_SELECTOR, "#\:r29\: > div.jsx-2656507978.common-modal-footer > button.TUXButton.TUXButton--default.TUXButton--medium.TUXButton--primary > div > div")
+            return print("Upload another video Css Selector vorked")
+        except:
+            print("Selector not working for upload another")
+
+        try:
+            uploadAnother = driver.find_element(By.CLASS_NAME, "TUXButton-label")
+            return print("Upload another video Class name vorked")
+        except:
+            print("Class name not working for upload another")
+
+    except:
+        print("Unable to find Upload Another button")
+        driver.get("https://www.tiktok.com/creator-center/upload?lang=sv-SE")
+        return print("Cant find upload another button")
+
 def upload():
-    driver.get("https://www.tiktok.com/upload?lang=sv-SE")
+    driver.get("https://www.tiktok.com/creator-center/upload?lang=sv-SE")
     video_path = getFirstFile()
 
     print("New upload started")
@@ -272,18 +290,18 @@ def upload():
 
             try:
                 if find_element_and_send("xpath",
-                                         "//*[@id='root']/div/div/div/div[2]/div[2]/div[2]/div[1]/div/div[1]/div[2]/div/div/div/div/div/div"):
+                                         "//*[@id='root']/div/div/div/div[2]/div/div[2]/div[1]/div/div[2]/div[1]/div/div/div"):
                     break
                 time.sleep(10)
                 if find_element_and_send("fullXpath",
-                                         "/html/body/div[1]/div/div/div/div[2]/div[2]/div[2]/div[1]/div/div[1]/div[2]/div/div/div/div/div/div"):
+                                         "/html/body/div[1]/div/div/div/div[2]/div/div[2]/div[1]/div/div[2]/div[1]/div/div/div"):
                     break
                 time.sleep(10)
                 if find_element_and_send("selector",
-                                         "#root > div > div > div > div.jsx-2977532431.container-v2 > div.jsx-2977532431.contents-v2 > div.jsx-3366794632.form-v2 > div.jsx-3366794632.caption-wrap-v2 > div > div:nth-child(1) > div.jsx-1768246377.margin-t-4 > div > div > div > div > div > div"):
+                                         "#root > div > div > div > div.jsx-480949468.container-v2.form-panel.flow-opt-v1 > div > div.jsx-2745626608.form-v2.reverse.flow-opt-v1 > div.jsx-2745626608.caption-wrap-v2 > div > div.jsx-4128635239.caption-markup > div.jsx-4128635239.caption-editor > div > div > div"):
                     break
                 time.sleep(10)
-                if find_element_and_send("className", "notranslate"):
+                if find_element_and_send("className", "notranslate public-DraftEditor-content"):
                     break
                 time.sleep(10)
                 if find_element_and_send("contenteditableAttribute", "[contenteditable='true']"):
@@ -299,42 +317,6 @@ def upload():
                 break
 
         publishButton(video_path)
-        """
-        try:
-            try:
-                time.sleep(15)
-                PublishButton = driver.find_element(By.XPATH,
-                                                    '/html/body/div[1]/div/div/div/div[2]/div[2]/div[2]/div[7]/div[2]/button')
-                PublishButton.click()
-
-                time.sleep(15)
-                deleteTheFile(video_path)
-            except:
-                print("Xpath dont work")
-
-            try:
-                PublishButton = driver.find_element(By.CSS_SELECTOR,
-                                                    '#root > div > div > div > div.jsx-2907531398.container-v2 > div.jsx-2907531398.contents-v2 > div.jsx-3073379498.form-v2 > div.jsx-3073379498.button-row > div.jsx-3073379498.btn-post > button')
-                PublishButton.click()
-
-                time.sleep(15)
-                deleteTheFile(video_path)
-            except:
-                print("Stylesheet dont work")
-
-            try:
-                PublishButton = driver.find_element(By.CLASS_NAME, "css-y1m958")
-                PublishButton.click()
-
-                time.sleep(15)
-                deleteTheFile(video_path)
-            except:
-                print("Class dont work") 
-
-
-        except:
-            print("Cant find PublishButton")
-            print("Error") """
 
         time.sleep(15)
 
@@ -345,6 +327,12 @@ def upload():
             UploadnewVideoButton.click()
         except:
             print("Cant click on adding new video")
+
+        try:
+            time.sleep(15)
+            uploadAnother()
+        except:
+            print("Issue with uploading another button")
         #popup()
     except:
         print("Error")

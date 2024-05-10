@@ -9,7 +9,7 @@ import ffmpeg
 import numpy as np
 
 # Vidio creating
-openai.api_key = "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"    # <---- your api key
+openai.api_key = ""    # <---- your api key
 
 def generate_response(prompt, max_attempts=3):
     for _ in range(max_attempts):
